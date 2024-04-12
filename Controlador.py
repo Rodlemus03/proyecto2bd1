@@ -68,13 +68,13 @@ class Queja(Base):
     clasificacion = Column(Integer)
     personal_afectado = Column(String)
     elemento_menu = Column(Integer, ForeignKey('elemento_menu.id'))  # Columna opcional si hay asociación con un elemento del menú
-    cliente = relationship("Cliente")
+    cliente = relationship("Cliente", back_populates="quejas", overlaps="cliente")
 
 class Cliente(Base):
     __tablename__ = 'clientes'
     id = Column(Integer, primary_key=True)
     nombre = Column(String)
-    quejas = relationship("Queja")
+    quejas = relationship("Queja", back_populates="cliente")
 
 # Configura la conexión a la base de datos
 engine = create_engine('postgresql://postgres:pelu1503@localhost:5432/proyecto2')
