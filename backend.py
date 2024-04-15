@@ -337,12 +337,13 @@ def eliminar_bebida_de_pedido(pedido_id, bebida_id):
 
 # Operaciones CRUD para la entidad Cuentas
 def crear_cuenta(pedido_id, total, propina=None, cerrada=False):
-    consulta = sql.SQL("""
+    consulta = """
         INSERT INTO Cuentas (pedido_id, total, propina, cerrada)
         VALUES (%s, %s, %s, %s)
         RETURNING *
-    """)
+    """
     return ejecutar_consulta(consulta, (pedido_id, total, propina, cerrada))
+
 
 def obtener_cuentas():
     consulta = sql.SQL("""
@@ -561,13 +562,7 @@ def reporte_eficiencia_meseros():
         ORDER BY mesero, mes;
     """
     return ejecutar_consulta(consulta)
-fecha_inicio = '2024-01-01'
-fecha_fin = '2024-12-31'
-# Obtener el promedio de tiempo en que se tardan los clientes en comer
-resultado_promedio_tiempo_comida = promedio_tiempo_comida_por_personas(fecha_inicio, fecha_fin)
-print("Promedio de tiempo en que se tardan los clientes en comer, agrupado por cantidad de personas:")
-for resultado in resultado_promedio_tiempo_comida:
-    print(f"{resultado['cantidad_personas']} personas: {resultado['tiempo_minutos']} minutos")
+
 
 
 

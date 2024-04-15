@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 from backend import *
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # API para la entidad Usuarios
 @app.route('/usuarios', methods=['GET'])
@@ -233,8 +235,17 @@ def eliminar_bebida_de_pedido_api(pedido_id, bebida_id):
 @app.route('/cuentas', methods=['POST'])
 def crear_cuenta_api():
     data = request.json
-    nueva_cuenta = crear_cuenta(data['pedido_id'], data['total'], data.get('propina'), data.get('cerrada', False))
+    pedido_id = data.get('pedido_id')
+    total = data.get('total')
+    propina = data.get('propina')
+    cerrada = data.get('cerrada', False)
+    id_mesa = data.get('id_mesa')  # Nuevo campo id_mesa
+    
+    # Insertar datos en la tabla cuentas
+    nueva_cuenta = crear_cuenta(pedido_id, total, propina, cerrada, id_mesa)
+    
     return jsonify(nueva_cuenta)
+
 
 @app.route('/cuentas', methods=['GET'])
 def obtener_cuentas_api():
@@ -341,6 +352,22 @@ def actualizar_queja_api(queja_id):
 def eliminar_queja_api(queja_id):
     eliminar_queja(queja_id)
     return '', 204  # No Content
+#Login
+@app.route('/login', methods=['POST'])
+def login_route():
+    if request.method == 'POST':
+        data = request.json
+        username = data.get('username')
+        password = data.get('password')
+        if username and password:
+            if login(username, password):
+                return jsonify({'success': True, 'message': 'Login successful'})
+            else:
+                return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
+        else:
+            return jsonify({'success': False, 'message': 'Missing username or password'}), 400
+    else:
+        return jsonify({'success': False, 'message': 'Method not allowed'}), 405
 
 if __name__ == '__main__':
     app.run(debug=True)

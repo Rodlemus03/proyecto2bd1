@@ -69,29 +69,50 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
-    $(document).ready(function() {
-      $("#openAccountForm").submit(function(event) {
-        event.preventDefault();
-        var tableNumber = $("#tableNumber").val();
-        $("#openTablesList").append(
-          '<li id="table' + tableNumber + '">Mesa ' + tableNumber +
-          '<button type="button" class="btn btn-success ml-2" onclick="addOrder(' + tableNumber + ')" data-toggle="modal" data-target="#addOrderModal">Agregar Pedido</button>' +
-          '<button type="button" class="btn btn-danger ml-2" onclick="closeAccount(' + tableNumber + ')">Cerrar y Facturar</button></li>'
-        );
-        $("#tableNumber").val('');
-        console.log("Mesa " + tableNumber + " abierta.");
-      });
+  $(document).ready(function() {
+  $("#openAccountForm").submit(function(event) {
+    event.preventDefault();
+    var tableNumber = $("#tableNumber").val();
+
+    // Crear objeto con los datos del formulario
+    var formData = {
+      pedido_id: tableNumber,
+      total: 0, // Por defecto, puede modificar esto según tus necesidades
+      propina: null, // Por defecto, puede modificar esto según tus necesidades
+      cerrada: false, // Por defecto, puede modificar esto según tus necesidades
+      id_mesa: tableNumber  // Nuevo campo id_mesa
+    };
+
+    // Enviar los datos al backend en formato JSON
+    fetch('http://127.0.0.1:5000/cuentas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(function(response) {
+      // Verificar si la respuesta es exitosa
+      if (!response.ok) {
+        throw new Error('Error al enviar la solicitud: ' + response.statusText);
+      }
+      // Convertir la respuesta a JSON
+      return response.json();
+    })
+    .then(function(data) {
+      // Manejar la respuesta del servidor
+      console.log('Respuesta del servidor:', data);
+      // Redirigir a menu.html si la creación de cuenta fue exitosa
+      window.location.href = 'menu.html';
+    })
+    .catch(function(error) {
+      // Manejar errores
+      console.error('Error al enviar la solicitud:', error);
     });
+  });
+});
 
-    function addOrder(tableNumber) {
-      console.log("Agregar pedido para Mesa " + tableNumber);
-      $("#searchResults").html('<li class="list-group-item">Producto 1</li><li class="list-group-item">Producto 2</li><li class="list-group-item">Producto 3</li>');
-    }
 
-    function closeAccount(tableNumber) {
-      $("#table" + tableNumber).remove();
-      console.log("Mesa " + tableNumber + " cerrada y facturada.");
-    }
   </script>
 </body>
 </html>
