@@ -12,6 +12,7 @@
   </style>
 </head>
 <body class="dark-mode">
+
   <div class="container mt-5">
     <h1 class="mb-4">Abrir Cuenta</h1>
     <div class="row">
@@ -31,10 +32,35 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Cuentas Abiertas</h5>
+            <h5 class="card-title">Mesas Abiertas</h5>
             <ul id="openTablesList">
             </ul>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="addOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addOrderModalLabel">Agregar Pedido</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="searchProduct">Buscar Producto</label>
+            <input type="text" class="form-control" id="searchProduct" name="searchProduct" placeholder="Escriba el nombre del producto...">
+          </div>
+          <ul id="searchResults" class="list-group">
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary">Guardar Pedido</button>
         </div>
       </div>
     </div>
@@ -49,12 +75,18 @@
         var tableNumber = $("#tableNumber").val();
         $("#openTablesList").append(
           '<li id="table' + tableNumber + '">Mesa ' + tableNumber +
+          '<button type="button" class="btn btn-success ml-2" onclick="addOrder(' + tableNumber + ')" data-toggle="modal" data-target="#addOrderModal">Agregar Pedido</button>' +
           '<button type="button" class="btn btn-danger ml-2" onclick="closeAccount(' + tableNumber + ')">Cerrar y Facturar</button></li>'
         );
         $("#tableNumber").val('');
         console.log("Mesa " + tableNumber + " abierta.");
       });
     });
+
+    function addOrder(tableNumber) {
+      console.log("Agregar pedido para Mesa " + tableNumber);
+      $("#searchResults").html('<li class="list-group-item">Producto 1</li><li class="list-group-item">Producto 2</li><li class="list-group-item">Producto 3</li>');
+    }
 
     function closeAccount(tableNumber) {
       $("#table" + tableNumber).remove();
