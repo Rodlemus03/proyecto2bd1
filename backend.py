@@ -6,7 +6,7 @@ import datetime
 conexion = psycopg2.connect(
     dbname="proyecto2",
     user="postgres",
-    password="pelu1503",
+    password="riv22500/",
     host="localhost",  # Cambia esto si tu base de datos está en otro host
     port="5432"        # Cambia esto si tu base de datos está en otro puerto
 )
