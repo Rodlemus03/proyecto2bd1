@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abrir Cuenta</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .card {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body class="dark-mode">
+  <div class="container mt-5">
+    <h1 class="mb-4">Abrir Cuenta</h1>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <form id="openAccountForm">
+              <div class="form-group">
+                <label for="tableNumber">Número de Mesa</label>
+                <input type="text" class="form-control" id="tableNumber" name="tableNumber" pattern="\d+" title="Ingrese solo números" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Abrir</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Cuentas Abiertas</h5>
+            <ul id="openTablesList">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#openAccountForm").submit(function(event) {
+        event.preventDefault();
+        var tableNumber = $("#tableNumber").val();
+        $("#openTablesList").append(
+          '<li id="table' + tableNumber + '">Mesa ' + tableNumber +
+          '<button type="button" class="btn btn-danger ml-2" onclick="closeAccount(' + tableNumber + ')">Cerrar y Facturar</button></li>'
+        );
+        $("#tableNumber").val('');
+        console.log("Mesa " + tableNumber + " abierta.");
+      });
+    });
+
+    function closeAccount(tableNumber) {
+      $("#table" + tableNumber).remove();
+      console.log("Mesa " + tableNumber + " cerrada y facturada.");
+    }
+  </script>
+</body>
+</html>
